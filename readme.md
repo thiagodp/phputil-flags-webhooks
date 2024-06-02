@@ -8,7 +8,7 @@
 
 ## Installation
 
-> PHP 7.4 or later. It uses [Guzzle](https://guzzlephp.org/) to make HTTP requests.
+> PHP 7.4 or later. It uses [Guzzle](https://guzzlephp.org/) for making HTTP requests.
 
 ```bash
 composer require phputil/flags-webhooks
@@ -28,9 +28,9 @@ $flags = new \phputil\flags\FlagManager();
 $flags->getListeners()->add( $listener );
 
 // Notifying
-$flags->enable( 'foo' ); // Send a POST request
-$flags->disable( 'foo' ); // Send a PUT request
-$flags->remove( 'foo' ); // Send a DELETE request
+$flags->enable( 'foo' ); // POST request (creates the)
+$flags->disable( 'foo' ); // PUT request (update)
+$flags->remove( 'foo' ); // DELETE request (removal)
 ```
 
 ## Documentation

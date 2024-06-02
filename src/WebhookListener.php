@@ -20,8 +20,14 @@ class WebhookListener implements FlagListener {
     private array $options = [];
 
     public function __construct(
+        $baseOptionsOrUrl = null,
         array $guzzleConfig = []
     ) {
+        if ( is_string( $baseOptionsOrUrl ) ) {
+            $this->options[ KEY_BASE ] = new WebOptions( $baseOptionsOrUrl );
+        } else if ( is_a( $baseOptionsOrUrl, WebOptions::class ) ) {
+            $this->options[ KEY_BASE ] = $baseOptionsOrUrl;
+        }
         $this->client = new Client( $guzzleConfig );
     }
 
@@ -114,8 +120,13 @@ class WebhookListener implements FlagListener {
     }
 
     private function getOptions( string $key ): WebOptions {
-        return ( $this->options[ $key ] =
-            $this->options[ $key ] ?? new WebOptions() );
+        if ( isset( $this->options[ $key ] ) ) {
+            return $this->options[ $key ];
+        }
+        $this->options[ $key ] = isset( $this->options[ KEY_BASE ] )
+            ? $this->options[ KEY_BASE ]->clone() : new WebOptions();
+
+        return $this->options[ $key ];
     }
 
     private function getUrl( string $key ): string {

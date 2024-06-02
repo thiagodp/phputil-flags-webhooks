@@ -4,16 +4,16 @@ namespace phputil\flags\webhooks;
 class WebOptions {
     private ?string $url = null;
     private ?array $headers = null;
-    private bool $async = false;
+    // private bool $async = false;
 
     public function __construct(
         ?string $url = null,
-        ?array $headers = null,
-        bool $async = false
+        ?array $headers = null
+        // bool $async = false
     ) {
         $this->withUrl( $url );
         $this->withHeaders( $headers );
-        $this->withAsync( $async );
+        // $this->withAsync( $async );
     }
 
     public function getUrl(): ?string {
@@ -34,13 +34,17 @@ class WebOptions {
         return $this;
     }
 
-    public function getAsync(): bool {
-        return $this->async;
-    }
+    // public function getAsync(): bool {
+    //     return $this->async;
+    // }
 
-    public function withAsync( bool $async ): WebOptions {
-        $this->async = $async;
-        return $this;
+    // public function withAsync( bool $async ): WebOptions {
+    //     $this->async = $async;
+    //     return $this;
+    // }
+
+    public function clone() {
+        return new WebOptions( $this->url, $this->headers );
     }
 }
 

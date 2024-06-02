@@ -8,6 +8,7 @@ use phputil\flags\FlagData;
 use phputil\flags\FlagException;
 use phputil\flags\FlagMetadata;
 use phputil\flags\webhooks\WebhookListener;
+use phputil\flags\webhooks\WebOptions;
 
 describe( 'WebhookListener', function() {
 
@@ -29,7 +30,7 @@ describe( 'WebhookListener', function() {
 
         $this->mock->append( new Response( 200 ) );
 
-        $listener = new WebhookListener( $this->config );
+        $listener = new WebhookListener( null, $this->config );
         $flag = new FlagData( 'foo', false, new FlagMetadata() );
         $listener->notify( 'change', $flag );
 
@@ -44,7 +45,7 @@ describe( 'WebhookListener', function() {
 
         $this->mock->append( new Response( 400 ) );
 
-        $listener = new WebhookListener( $this->config );
+        $listener = new WebhookListener( null, $this->config );
         $flag = new FlagData( 'foo', false, new FlagMetadata() );
 
         expect( function() use ( $listener, $flag ) {
@@ -57,7 +58,7 @@ describe( 'WebhookListener', function() {
 
         $this->mock->append( new Response( 500 ) );
 
-        $listener = new WebhookListener( $this->config );
+        $listener = new WebhookListener( null, $this->config );
         $flag = new FlagData( 'foo', false, new FlagMetadata() );
 
         expect( function() use ( $listener, $flag ) {
@@ -70,7 +71,7 @@ describe( 'WebhookListener', function() {
 
         $this->mock->append( new Response( 200 ) );
 
-        $listener = new WebhookListener( $this->config );
+        $listener = new WebhookListener( null, $this->config );
         $flag = new FlagData( 'foo', false, new FlagMetadata( 1 ) );
         $listener->notify( 'change', $flag );
 
@@ -83,7 +84,7 @@ describe( 'WebhookListener', function() {
 
         $this->mock->append( new Response( 200 ) );
 
-        $listener = new WebhookListener( $this->config );
+        $listener = new WebhookListener( null, $this->config );
 
         $flag = new FlagData( 'foo', false, new FlagMetadata( 1 ) );
         $listener->notify( 'change', $flag );
@@ -98,7 +99,7 @@ describe( 'WebhookListener', function() {
 
         $this->mock->append( new Response( 200 ) );
 
-        $listener = new WebhookListener( $this->config );
+        $listener = new WebhookListener( null, $this->config );
         $flag = new FlagData( 'foo', false, new FlagMetadata( 1 ) );
         $listener->notify( 'removal', $flag );
 
@@ -112,7 +113,7 @@ describe( 'WebhookListener', function() {
 
         $this->mock->append( new Response( 200 ) );
 
-        $listener = new WebhookListener( $this->config );
+        $listener = new WebhookListener( null, $this->config );
 
         $flag = new FlagData( 'foo', false, new FlagMetadata( 1 ) );
         $listener->notify( 'removal', $flag );
@@ -120,6 +121,35 @@ describe( 'WebhookListener', function() {
         expect( $this->container )->toHaveLength( 1 );
         $request = $this->container[ 0 ][ 'request' ];
         expect( $request->getUri()->getPath() )->toBe( '/1' );
+    } );
+
+
+    describe( 'options', function() {
+
+        it( 'assumes the base option when the creation option is not defined', function() {
+            $url = 'https://foo.com';
+            $l = new WebhookListener( new WebOptions( $url ) );
+            expect( $l->creationOptions()->getUrl() )->toEqual( $url );
+        } );
+
+        it( 'assumes the base option when the change option is not defined', function() {
+            $url = 'https://foo.com';
+            $l = new WebhookListener( new WebOptions( $url ) );
+            expect( $l->changeOptions()->getUrl() )->toEqual( $url );
+        } );
+
+        it( 'assumes the base option when the removal option is not defined', function() {
+            $url = 'https://foo.com';
+            $l = new WebhookListener( new WebOptions( $url ) );
+            expect( $l->removalOptions()->getUrl() )->toEqual( $url );
+        } );
+
+    } );
+
+    it( 'can be instantiated with a url', function() {
+        $url = 'https://foo.com';
+        $l = new WebhookListener( $url );
+        expect( $l->baseOptions()->getUrl() )->toEqual( $url );
     } );
 } );
 
