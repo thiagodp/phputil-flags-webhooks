@@ -5,6 +5,7 @@
 [![License](https://poser.pugx.org/phputil/flags-webhooks/license?style=flat-square)](https://packagist.org/packages/phputil/flags-webhooks)
 [![PHP](http://poser.pugx.org/phputil/flags-webhooks/require/php)](https://packagist.org/packages/phputil/flags-webhooks)
 
+> Web hooks for the [phputil/flags](https://github.com/thiagodp/phputil-flags)  framework.
 
 ## Installation
 
@@ -28,7 +29,7 @@ $flags = new \phputil\flags\FlagManager();
 $flags->getListeners()->add( $listener );
 
 // Notifying
-$flags->enable( 'foo' ); // POST request (creates the)
+$flags->enable( 'foo' ); // POST request (creation)
 $flags->disable( 'foo' ); // PUT request (update)
 $flags->remove( 'foo' ); // DELETE request (removal)
 ```
